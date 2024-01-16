@@ -1,6 +1,16 @@
 import React from 'react';
 import './App.css';
-import {alpha, Button, CSSObject, InputBase, ListItem, Menu, MenuItem, Theme} from '@mui/material';
+import {
+  alpha,
+  Button, CssBaseline,
+  CSSObject,
+  InputBase,
+  ListItem,
+  Menu,
+  MenuItem,
+  Theme
+} from '@mui/material';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import {styled} from '@mui/material/styles';
 import {AccountCircle, AddCircle, AddCircleOutline, Diamond} from '@mui/icons-material';
@@ -25,8 +35,6 @@ import ListItemText from '@mui/material/ListItemText';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import {Lots} from './components/Lots';
-
-const drawerWidth = 240
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
@@ -86,6 +94,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
+
+const drawerWidth = 240
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -155,6 +165,12 @@ const AppBar = styled(MuiAppBar, {
     }),
   }),
 }));
+
+const theme = createTheme({
+  palette: {
+    mode: 'dark',
+  }
+});
 
 function App() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -256,70 +272,73 @@ function App() {
   )
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed" open={drawerOpen}>
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{
-              mr: 5,
-              ...(drawerOpen && { display: 'none' }),
-            }}
-            onClick={handleDrawerOpen}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
-          >
-            Auctionator EVM
-          </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="fixed" open={drawerOpen}>
+          <Toolbar>
             <IconButton
               size="large"
-              aria-label="show notifications"
+              edge="start"
               color="inherit"
+              aria-label="open drawer"
+              sx={{
+                mr: 5,
+                ...(drawerOpen && { display: 'none' }),
+              }}
+              onClick={handleDrawerOpen}
             >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
+              <MenuIcon />
             </IconButton>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{ display: { xs: 'none', sm: 'block' } }}
             >
-              <AccountCircle />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
-      {renderMenu}
-      {renderDrawer}
-      <Main open={drawerOpen}>
-        <Lots />
-      </Main>
-    </Box>
+              Auctionator EVM
+            </Typography>
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+              />
+            </Search>
+            <Box sx={{ flexGrow: 1 }} />
+            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+              <IconButton
+                size="large"
+                aria-label="show notifications"
+                color="inherit"
+              >
+                <Badge badgeContent={17} color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                size="large"
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+            </Box>
+          </Toolbar>
+        </AppBar>
+        {renderMenu}
+        {renderDrawer}
+        <Main open={drawerOpen}>
+          <Lots />
+        </Main>
+      </Box>
+    </ThemeProvider>
   );
 }
 
